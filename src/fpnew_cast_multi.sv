@@ -543,13 +543,7 @@ module fpnew_cast_multi #(
     .sign_i                  ( input_sign_q      ), // source format
     .round_sticky_bits_i     ( round_sticky_bits ),
     .rnd_mode_i              ( rnd_mode_q        ),
-`ifdef _VCP // PAK2591
-    .effective_subtraction_i (ariane_pkg::ALDEC_1B0), // no operation happened
-
-`else
     .effective_subtraction_i ( 1'b0              ), // no operation happened
-
-`endif
     .abs_rounded_o           ( rounded_abs       ),
     .sign_o                  ( rounded_sign      ),
     .exact_zero_o            ( result_true_zero  )
