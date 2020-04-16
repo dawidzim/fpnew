@@ -390,20 +390,9 @@ package fpnew_pkg;
 
   // Returns the maximum number of lanes in the FPU according to width, format config and vectors
   function automatic int unsigned max_num_lanes(int unsigned width, fmt_logic_t cfg, logic vec);
-  `ifdef _VCP // PAK2575
-    automatic int unsigned res = 0;
-    for (int unsigned i = 0; i < NUM_FP_FORMATS; i++)
-      if (cfg[i])
-        res = unsigned'(maximum(res, fp_width(fp_format_e'(i))));
 
-    for (int unsigned i = 0; i < NUM_FP_FORMATS; i++)
-      if (cfg[i])
-        res = unsigned'(minimum(res, fp_width(fp_format_e'(i))));
-		
+	automatic int unsigned res = min_fp_width(cfg);
     return vec ? width / res : 1; // if no vectors, only one lane
-  `else
-    return vec ? width / min_fp_width(cfg) : 1; // if no vectors, only one lane
-  `endif
   endfunction
 
   // Returns a mask of active FP formats that are present in lane lane_no of a multiformat slice

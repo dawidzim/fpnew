@@ -83,6 +83,11 @@ module fpnew_opgroup_block #(
     localparam logic IS_FIRST_MERGED =
         fpnew_pkg::is_first_enabled_multi(fpnew_pkg::fp_format_e'(fmt), FmtUnitTypes, FpFmtMask);
 
+	  logic [Width-1:0]   result_dont_care;
+          fpnew_pkg::status_t status_dont_care;
+	  assign results_dont_care = '{default: fpnew_pkg::DONT_CARE};
+	  assign status_dont_care = '{default: fpnew_pkg::DONT_CARE};
+	  
     // Generate slice only if format enabled
     if (FpFmtMask[fmt] && (FmtUnitTypes[fmt] == fpnew_pkg::PARALLEL)) begin : active_format
 
@@ -129,13 +134,9 @@ module fpnew_opgroup_block #(
       assign fmt_out_valid[fmt] = 1'b0; // don't emit values
       assign fmt_busy[fmt]      = 1'b0; // never busy
       // Outputs are don't care
-	  `ifdef _VCP // PAK2592
-      assign fmt_outputs[fmt].result  = {Width{fpnew_pkg::DONT_CARE}};
-      assign fmt_outputs[fmt].status  = {5{fpnew_pkg::DONT_CARE}};
-	  `else
-      assign fmt_outputs[fmt].result  = '{default: fpnew_pkg::DONT_CARE};
-      assign fmt_outputs[fmt].status  = '{default: fpnew_pkg::DONT_CARE};
-	  `endif
+     
+	  assign fmt_outputs[fmt].result  = results_dont_care;
+      assign fmt_outputs[fmt].status  = status_dont_care;
       assign fmt_outputs[fmt].ext_bit = fpnew_pkg::DONT_CARE;
       assign fmt_outputs[fmt].tag     = TagType'(fpnew_pkg::DONT_CARE);
 
@@ -144,14 +145,10 @@ module fpnew_opgroup_block #(
       assign fmt_in_ready[fmt]  = 1'b0; // don't accept operations
       assign fmt_out_valid[fmt] = 1'b0; // don't emit values
       assign fmt_busy[fmt]      = 1'b0; // never busy
-      // Outputs are don't care
-	  `ifdef _VCP // PAK2592
-      assign fmt_outputs[fmt].result  = {Width{fpnew_pkg::DONT_CARE}};
-      assign fmt_outputs[fmt].status  = {5{fpnew_pkg::DONT_CARE}};
-	  `else
-      assign fmt_outputs[fmt].result  = '{default: fpnew_pkg::DONT_CARE};
-      assign fmt_outputs[fmt].status  = '{default: fpnew_pkg::DONT_CARE};
-	  `endif
+	  // Outputs are don't care
+
+      assign fmt_outputs[fmt].result  = results_dont_care;
+      assign fmt_outputs[fmt].status  = status_dont_care;
       assign fmt_outputs[fmt].ext_bit = fpnew_pkg::DONT_CARE;
       assign fmt_outputs[fmt].tag     = TagType'(fpnew_pkg::DONT_CARE);
     end
